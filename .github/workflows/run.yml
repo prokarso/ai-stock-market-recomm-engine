@@ -2,15 +2,15 @@ name: Daily Stock Engine
 
 on:
   schedule:
-    - cron: '30 14 * * *'
-  workflow_dispatch:
+    - cron: '30 14 * * *'   # Runs at 8:00 PM IST (UTC 14:30)
+  workflow_dispatch:        # Allows manual trigger
 
 jobs:
   run-script:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -22,5 +22,9 @@ jobs:
         run: |
           pip install pandas numpy yfinance scikit-learn
 
-      - name: Run script
+      - name: Run stock pipeline
         run: python main.py
+        env:
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
